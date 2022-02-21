@@ -1,0 +1,36 @@
+@charset "UTF-8";
+
+footer {
+	background-color: #464646;
+    padding: 50px 10px;
+}
+
+.main-content {
+	margin: 0 auto;
+    max-width: 1020px;
+    font-size: 16px;
+    line-height: 19px;
+    font-weight: 500;
+    color: #ddd;
+}
+
+.main-content ul {
+	float: left;
+    width: 33%;
+    margin-bottom: 10px;
+}
+
+.main-content ul strong {
+	display: inline-block;
+    margin-bottom: 8px;
+}
+.main-content ul strong {
+	display: inline-block;
+    margin-bottom: 8px;
+}
+
+.main-content ul a {
+	font-size: 14px;
+    line-height: 1.71;
+    color: #aaa;
+}

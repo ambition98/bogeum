@@ -1,4 +1,4 @@
-package com.bogeum.jpatest;
+package com.bogeum.web.entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;

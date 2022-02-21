@@ -55,20 +55,3 @@
 	font-size: 1.04em;
 	cursor: pointer;
 }
-
-.signup-wrapper {
-	margin-top: 10px;
-	padding: 10px;
-	border: 1px solid #cbcbcb;
-	border-radius: 8px;
-	text-align: center;
-}
-
-.invalid-auth {
-    border: 1px solid #ff9b9b;
-    background: #ffeaea;
-    border-radius: 6px;
-    padding: 10px;
-    margin-bottom: 10px;
-    text-align: center;
-}
