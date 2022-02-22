@@ -37,7 +37,7 @@
 }
 
 .input-signin {
-	margin: 10px 10px 20px 37px;
+	margin: 10px 10px 10px 37px;
 	width: 80%;
 	height: 33px;
 	border-radius: 10px;
@@ -54,4 +54,15 @@
 	background: #2c974b;
 	font-size: 1.04em;
 	cursor: pointer;
+}
+
+.invalid-input {
+	border: 1px solid red;
+}
+
+.invalid-msg {
+	margin-left: 39px;
+    color: #cb0000;
+    font-size: 0.9em;
+    margin-bottom: 20px;
 }

@@ -22,13 +22,20 @@
 			회원가입
 		</div>
 		<div class="signin-form-wrapper">
-			<form action="<c:url value='/signup' />" method="post">
+			<form id="signup-form" action="<c:url value='/signup' />" method="post">
 				<label for="input-email">이메일</label>
 				<input class="input-signin" id="input-email" name="email" />
+				<div class="invalid-msg none" id="dup-email">이미 사용중인 이메일입니다.</div>
+				<div class="invalid-msg none" id="invalid-email-pattern">이메일 형식이 잘못되었습니다.</div>
+				
 				<label for="input-passwd">비밀번호</label>
 				<input class="input-signin" id="input-passwd" name="passwd" />
+				<div class="invalid-msg none" id="invalid-pw-pattern">비밀번호 형식이 잘못되었습니다.</div>
+				
+				
 				<label for="input-passwd">비밀번호 확인</label>
 				<input class="input-signin" id="input-passwd-repeat" name="passwdrp" />
+				<div class="invalid-msg none" id="not-same-pw">비밀번호와 비밀번호 확인이 다릅니다.</div>
 				
 				<button class="btn-signin" type="submit">회원가입</button>
 			</form>
