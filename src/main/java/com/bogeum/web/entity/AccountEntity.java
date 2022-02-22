@@ -14,11 +14,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Entity
-@Table(name = "account")
 @Getter
 @Setter
 @ToString
+@Entity
+@Table(name = "account")
 public class AccountEntity implements Serializable {
 	
 	private static final long serialVerionUID = 1L;
