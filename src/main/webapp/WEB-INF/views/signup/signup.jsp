@@ -22,7 +22,7 @@
 			회원가입
 		</div>
 		<div class="signin-form-wrapper">
-			<form id="signup-form" action="<c:url value='/signup' />" method="post">
+			<form id="signup-form" action="<c:url value='/api/account' />" method="post">
 				<label for="input-email">이메일</label>
 				<input class="input-signin" id="input-email" name="email" />
 				<div class="invalid-msg none" id="dup-email">이미 사용중인 이메일입니다.</div>

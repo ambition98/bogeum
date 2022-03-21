@@ -25,16 +25,29 @@ window.onload = function() {
 		
 	});
 	
-	$('input-email').on('blur', function() {
+	$('#input-email').on('blur', function() {
 		const input = $('#input-email');
-		const msg = $('#invalid-email-pattern');
-		const email = $('#email').val();
+		const msg1 = $('#invalid-email-pattern');
+		const msg2 = $('#dup-email');
+		const email = $(input).val();
 		
 		if(isValidEmailPattern(email)) {
-			changeToValidState(input, msg);
+			changeToValidState(input, msg1);
 			isValidEmail = true;
+			
+			$.get("/bogeum/api/account/exists", {"email": email})
+				.done(function() {
+					//200 OK
+					changeToValidState(input, msg2);
+				})
+				
+				.fail(function() {
+					//409 Conflict
+					changeToInvalidState(input, msg2);
+				});
+			
 		} else {
-			changeToInvalidState(input, msg);
+			changeToInvalidState(input, msg1);
 			isValidEmail = false;
 		}
 	});
