@@ -5,10 +5,8 @@ import java.util.List;
 import com.bogeum.web.restapi.model.ApiResponseCode;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
 public class ListDtoResponse<T> extends CommonResponse {
 	
 	private List<T> dtoList;
