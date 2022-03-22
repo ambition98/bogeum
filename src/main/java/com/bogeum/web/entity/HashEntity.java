@@ -20,9 +20,11 @@ public class HashEntity implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
+	protected HashEntity() {}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int no;
+	private Long no;
 	
 	@Column(length = 64, nullable = false)
 	private String digest;

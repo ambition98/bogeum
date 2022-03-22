@@ -12,22 +12,21 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 @Getter
-@ToString
+@ToString(exclude = {"bogeum", "bogeum_member"})
 @Entity
 @Table(name = "ACCOUNT")
 public class AccountEntity implements Serializable {
 	
-	private static final long serialVerionUID = 1L;
+	private static final long serialVersionUID = 1L;
+
+	protected AccountEntity() {}
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-//	@Column(name = "accountNo", nullable = false)
-	private int no;
+	private Long no;
 	
 	@Column(length = 50, nullable = false)
 	private String email;
@@ -36,7 +35,7 @@ public class AccountEntity implements Serializable {
 	private String imagePath;
 	
 	@Column(length = 1, nullable = false)
-	private boolean isVerified;
+	private Boolean isVerified;
 	
 	@Column(length = 250, nullable = true)
 	private String accessToken;

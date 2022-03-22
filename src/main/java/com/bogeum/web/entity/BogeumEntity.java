@@ -16,16 +16,18 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Getter
-@ToString
+@ToString(exclude = "account")
 @Entity
 @Table(name = "BOGEUM")
 public class BogeumEntity implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
+	protected BogeumEntity() {}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int no;
+	private Long no;
 	
 //	@Column(nullable = false)
 //	private int accountNo;
