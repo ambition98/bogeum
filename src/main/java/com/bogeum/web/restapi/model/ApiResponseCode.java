@@ -19,6 +19,8 @@ public enum ApiResponseCode {
 	// -99 ~ -1: 공통 오류
 	UNKNOWN(-1, "[PATAL] UNKNOWN ERROR"),
 	INVALID_STRING_PATTERN(-2, "Invalid string pattern"),
+	NOT_A_NUMBER(-3, "Not a number"),
+	RESOURCES_ARE_NOT_FOUNT(-4, "Resources are not fount"),
 	
 	// -199 ~ -100: User account 관련 오류 
 	DUPLICATED_EMAIL(-100, "Already used email");
