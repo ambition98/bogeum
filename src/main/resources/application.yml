@@ -1,0 +1,88 @@
+spring:
+  profiles:
+    active: dev
+---
+spring:
+  profiles:
+    group:
+      dev: 
+      - common
+      - h2db
+      
+      test:
+      - common
+      - h2db
+      
+      prod:
+      - common
+      - ec2db
+      
+---
+### ec2db 설정 (prod- 배포환경) ###
+spring:
+  config:
+    activate:
+      on-profile: ec2db
+      
+  datasource:
+    hikari:
+      driver-class-name: org.mariadb.jdbc.Driver
+      jdbc-url: jdbc:mariadb://13.209.64.67:3306/bogeum
+      username: mysql
+      password: mysql
+  
+  jpa:
+    hibernate:
+      ddl-auto: none #!!! 변경 x
+---
+### h2db 설정 (dev, test- 개발 및 테스트환경) ###
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      
+  sql:
+    init:
+      mode: always
+      #schema-locations: classpath:/h2/schema.sql
+      #data-locations: classpath:/h2/data.sql
+
+  datasource:
+    hikari:
+      driver-class-name: org.h2.Driver
+      jdbc-url: jdbc:h2:mem://localhost:8081/testbogeum
+      username: testbogeum
+      password:
+    
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create
+      
+---
+### common 설정(공통설정) ###
+server:
+  port: 8080
+  servlet:
+    context-path: /bogeum
+    
+spring:
+  config:
+    activate:
+      on-profile: common
+
+  jpa:
+    show-sql: true 
+    
+    open-in-view: true
+    hibernate:
+      use-new-id-generator-mappings: false
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        
