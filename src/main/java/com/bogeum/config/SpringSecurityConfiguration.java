@@ -12,11 +12,14 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http
-			.authorizeHttpRequests().anyRequest().permitAll();
-//			.csrf().disable()
-//			.cors().disable()
-//			.headers().frameOptions().disable();
+		http.csrf().disable();
+		
+		http.cors().disable();
+		
+		http.headers().frameOptions().disable();
+		
+		http.authorizeHttpRequests()
+				.anyRequest().permitAll();
 			
 	}
 	
