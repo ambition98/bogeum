@@ -9,10 +9,10 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @JsonFormat(shape = Shape.OBJECT)
-public enum ApiResponseCode {
+public enum ApiStatus {
 	
 	/*    일반 응답 코드    */
-	SUCCESS(1, "Succeed"),
+	SUCCESS(1, "Success"),
 	
 	
 	/*      오류 코드     */
@@ -20,7 +20,7 @@ public enum ApiResponseCode {
 	UNKNOWN(-1, "[PATAL] UNKNOWN ERROR"),
 	INVALID_STRING_PATTERN(-2, "Invalid string pattern"),
 	NOT_A_NUMBER(-3, "Not a number"),
-	RESOURCES_ARE_NOT_FOUNT(-4, "Resources are not fount"),
+	RESOURCES_ARE_NOT_FOUND(-4, "Resources are not found"),
 	
 	// -199 ~ -100: User account 관련 오류 
 	DUPLICATED_EMAIL(-100, "Already used email");
