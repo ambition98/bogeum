@@ -2,8 +2,13 @@ package com.bogeum.web.restapi;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityNotFoundException;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,11 +20,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bogeum.exception.ResourceNotFoundException;
 import com.bogeum.util.CheckStringValidation;
 import com.bogeum.web.dto.account.AccountDto;
 import com.bogeum.web.dto.account.AccountSignupDto;
 import com.bogeum.web.entity.AccountEntity;
-import com.bogeum.web.restapi.model.ApiResponseCode;
+import com.bogeum.web.restapi.model.ApiStatus;
 import com.bogeum.web.restapi.model.response.CommonResponse;
 import com.bogeum.web.restapi.model.response.ListDtoResponse;
 import com.bogeum.web.restapi.model.response.SingleDtoResponse;
@@ -45,8 +51,11 @@ public class AccountApi {
 
 	@GetMapping("")
 	public ResponseEntity<CommonResponse> getAllAccounts() {
-		List<AccountEntity> entityList = accountService.findAll();
 		List<AccountDto> dtoList = new ArrayList<>();
+		List<AccountEntity> entityList = accountService.findAll();
+		
+		if(entityList.size() == 0)
+			return new ResponseEntity<>(new CommonResponse(ApiStatus.RESOURCES_ARE_NOT_FOUND), HttpStatus.NOT_FOUND);
 		
 		for(AccountEntity entity : entityList) {
 			System.out.println(entity);
@@ -55,7 +64,7 @@ public class AccountApi {
 			dtoList.add(dto);
 		}
 		
-		ListDtoResponse<AccountDto> response = new ListDtoResponse<>(ApiResponseCode.SUCCESS, dtoList);
+		ListDtoResponse<AccountDto> response = new ListDtoResponse<>(ApiStatus.SUCCESS, dtoList);
 		
 		return ResponseEntity.ok(response);
 	}
@@ -63,32 +72,36 @@ public class AccountApi {
 	@GetMapping("/{no}")
 	public ResponseEntity<CommonResponse> getAccount(@PathVariable String no) {
 		Long longNo;
+		AccountEntity entity = null;
 		
 		try {
 			longNo = Long.parseLong(no);
+			entity = accountService.findByNo(longNo);
+			
 		} catch (NumberFormatException e) {
-			return new ResponseEntity<>(new CommonResponse(ApiResponseCode.NOT_A_NUMBER), HttpStatus.BAD_REQUEST);
-		}
-		
-		AccountEntity entity = accountService.findByNo(longNo);
-		
-		if(entity == null) {
-			return new ResponseEntity<>(new CommonResponse(ApiResponseCode.RESOURCES_ARE_NOT_FOUNT), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(new CommonResponse(ApiStatus.NOT_A_NUMBER), HttpStatus.BAD_REQUEST);
+			
+		} catch (ResourceNotFoundException e) {
+			return new ResponseEntity<>(new CommonResponse(ApiStatus.RESOURCES_ARE_NOT_FOUND), HttpStatus.NOT_FOUND);
 		}
 		
 		AccountDto dto = modelMapper.map(entity, AccountDto.class);
-		SingleDtoResponse<AccountDto> response = new SingleDtoResponse<>(ApiResponseCode.SUCCESS, dto);
+		SingleDtoResponse<AccountDto> response = new SingleDtoResponse<>(ApiStatus.SUCCESS, dto);
 		
-		return ResponseEntity.ok().body(response);
-	
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 	@PostMapping("")
 	public ResponseEntity<CommonResponse> postAccount(AccountSignupDto signupDto) {
-		System.out.println("test");
 		System.out.println(signupDto);
+		AccountEntity entity = new AccountEntity();
+		entity.setEmail(signupDto.getEmail());
 		
-		return null;
+		System.out.println(entity);
+		entity = accountService.save(entity);
+		System.out.println(entity);
+		
+		return new ResponseEntity<>(new CommonResponse(ApiStatus.SUCCESS), HttpStatus.OK);
 	}
 	
 	@PutMapping("/{no}")
@@ -105,19 +118,13 @@ public class AccountApi {
 	
 	@GetMapping("/exists")
 	public ResponseEntity<CommonResponse> isValidEmail(@RequestParam("email") String email) {
-		HttpStatus httpStatus = null;
-		ApiResponseCode apiCode = null;
-		
 		if(accountService.isExistedEmail(email)) {
-			httpStatus = HttpStatus.CONFLICT;
-			apiCode = ApiResponseCode.DUPLICATED_EMAIL;
+			return new ResponseEntity<>(
+					new CommonResponse(ApiStatus.DUPLICATED_EMAIL)
+					, HttpStatus.CONFLICT);
+			
 		} else {
-			httpStatus = HttpStatus.OK;
-			apiCode = ApiResponseCode.SUCCESS;
+			return new ResponseEntity<>(new CommonResponse(ApiStatus.SUCCESS), HttpStatus.OK);
 		}
-		
-		CommonResponse responseBody = new CommonResponse(apiCode);
-		
-		return new ResponseEntity<>(responseBody, httpStatus);
 	}
 }
