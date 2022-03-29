@@ -1,14 +1,10 @@
 package com.bogeum.web.restapi;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityNotFoundException;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,14 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bogeum.exception.ResourceNotFoundException;
 import com.bogeum.util.CheckStringValidation;
+import com.bogeum.util.HashingUtil;
 import com.bogeum.web.dto.account.AccountDto;
 import com.bogeum.web.dto.account.AccountSignupDto;
 import com.bogeum.web.entity.AccountEntity;
+import com.bogeum.web.entity.HashEntity;
 import com.bogeum.web.restapi.model.ApiStatus;
 import com.bogeum.web.restapi.model.response.CommonResponse;
 import com.bogeum.web.restapi.model.response.ListDtoResponse;
 import com.bogeum.web.restapi.model.response.SingleDtoResponse;
 import com.bogeum.web.service.AccountService;
+import com.bogeum.web.service.HashService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,30 +37,21 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/account")
 public class AccountApi {
 	
-	private final CheckStringValidation checkStringValidation;
 	private final AccountService accountService;
-	private final ModelMapper modelMapper;
+	private final HashService hashService; 
 	
-	public AccountApi(CheckStringValidation checkStringValidation, AccountService accountService,
-			ModelMapper modelMapper) {
-		this.checkStringValidation = checkStringValidation;
+	public AccountApi(AccountService accountService, HashService hashService) {
 		this.accountService = accountService;
-		this.modelMapper = modelMapper;
+		this.hashService = hashService;
 	}
 
 	@GetMapping("")
 	public ResponseEntity<CommonResponse> getAllAccounts() {
-		List<AccountDto> dtoList = new ArrayList<>();
-		List<AccountEntity> entityList = accountService.findAll();
-		
-		if(entityList.size() == 0)
+		List<AccountDto> dtoList;
+		try {
+			dtoList = accountService.findAll();
+		} catch (ResourceNotFoundException e) {
 			return new ResponseEntity<>(new CommonResponse(ApiStatus.RESOURCES_ARE_NOT_FOUND), HttpStatus.NOT_FOUND);
-		
-		for(AccountEntity entity : entityList) {
-			System.out.println(entity);
-			AccountDto dto = modelMapper.map(entity, AccountDto.class);
-			System.out.println(dto);
-			dtoList.add(dto);
 		}
 		
 		ListDtoResponse<AccountDto> response = new ListDtoResponse<>(ApiStatus.SUCCESS, dtoList);
@@ -72,20 +62,19 @@ public class AccountApi {
 	@GetMapping("/{no}")
 	public ResponseEntity<CommonResponse> getAccount(@PathVariable String no) {
 		Long longNo;
-		AccountEntity entity = null;
+		AccountDto dto = null;
 		
 		try {
 			longNo = Long.parseLong(no);
-			entity = accountService.findByNo(longNo);
+			dto = accountService.findByNo(longNo);
 			
-		} catch (NumberFormatException e) {
+		} catch (NumberFormatException e) {// 숫자가 아닌 문자로 요청
 			return new ResponseEntity<>(new CommonResponse(ApiStatus.NOT_A_NUMBER), HttpStatus.BAD_REQUEST);
 			
-		} catch (ResourceNotFoundException e) {
+		} catch (ResourceNotFoundException e) { // 찾은 결과가 존재하지 않음
 			return new ResponseEntity<>(new CommonResponse(ApiStatus.RESOURCES_ARE_NOT_FOUND), HttpStatus.NOT_FOUND);
 		}
 		
-		AccountDto dto = modelMapper.map(entity, AccountDto.class);
 		SingleDtoResponse<AccountDto> response = new SingleDtoResponse<>(ApiStatus.SUCCESS, dto);
 		
 		return new ResponseEntity<>(response, HttpStatus.OK);
@@ -93,15 +82,26 @@ public class AccountApi {
 	
 	@PostMapping("")
 	public ResponseEntity<CommonResponse> postAccount(AccountSignupDto signupDto) {
-		System.out.println(signupDto);
-		AccountEntity entity = new AccountEntity();
-		entity.setEmail(signupDto.getEmail());
+
+		// 이메일 정규식 확인
+		if(!CheckStringValidation.checkEmail(signupDto.getEmail()))
+			return new ResponseEntity<>(new CommonResponse(ApiStatus.INVALID_EMAIL_PATTERN), HttpStatus.BAD_REQUEST);
 		
-		System.out.println(entity);
-		entity = accountService.save(entity);
-		System.out.println(entity);
+		// 이메일 중복 확인 (서버단에서 한번 더)
+		if(accountService.isExistedEmail(signupDto.getEmail()))
+			return new ResponseEntity<>(new CommonResponse(ApiStatus.DUPLICATED_EMAIL), HttpStatus.CONFLICT);
 		
-		return new ResponseEntity<>(new CommonResponse(ApiStatus.SUCCESS), HttpStatus.OK);
+		AccountDto dto = null;
+		try {
+			dto = hashService.save(signupDto);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(new CommonResponse(ApiStatus.API_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		SingleDtoResponse<AccountDto> response = new SingleDtoResponse<AccountDto>(ApiStatus.SUCCESS, dto);
+		
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 	@PutMapping("/{no}")
