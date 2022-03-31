@@ -25,7 +25,8 @@ public enum ApiStatus {
 	
 	// -199 ~ -100: User account 관련 오류 
 	DUPLICATED_EMAIL(-100, "Email is already used"),
-	INVALID_EMAIL_PATTERN(-101, "Invalid email pattern");
+	INVALID_EMAIL_PATTERN(-101, "Invalid email pattern"),
+	INVALID_EMAIL_OR_PASSWORD(-102, "Invalid email or password");
 	
 	private int code;
 	private String msg;
