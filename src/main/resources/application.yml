@@ -34,6 +34,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none #!!! 변경 x
+      
+logging:
+  level:
+    root: warn
 ---
 ### h2db 설정 (dev, test- 개발 및 테스트환경) ###
 spring:
@@ -61,6 +65,9 @@ spring:
     hibernate:
       ddl-auto: create-drop
       
+logging:
+  level:
+    root: info
 ---
 ### common 설정(공통설정) ###
 spring:
