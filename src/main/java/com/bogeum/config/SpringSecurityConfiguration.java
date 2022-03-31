@@ -20,7 +20,8 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		
 		http.authorizeHttpRequests()
 				.anyRequest().permitAll();
-			
+		
+		
 	}
 	
 	@Bean

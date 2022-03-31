@@ -1,38 +1,48 @@
 package com.bogeum.web.service;
 
-import java.security.NoSuchAlgorithmException;
-
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.bogeum.util.HashingUtil;
+import com.bogeum.exception.ResourceNotFoundException;
 import com.bogeum.web.dto.account.AccountDto;
-import com.bogeum.web.dto.account.AccountSignupDto;
+import com.bogeum.web.dto.account.AccountSignDto;
 import com.bogeum.web.entity.HashEntity;
+import com.bogeum.web.repository.AccountRepository;
 import com.bogeum.web.repository.HashRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class HashService {
 	
 	private final HashRepository hashRepository;
+	private final AccountRepository accountRepository;
 	private final ModelMapper modelMapper;
-	
-	public HashService(HashRepository hashRepository, ModelMapper modelMapper) {
-		this.hashRepository = hashRepository;
-		this.modelMapper = modelMapper;
-	}
+	private final PasswordEncoder passwdEncoder;
 
-	public AccountDto save(AccountSignupDto dto) throws NoSuchAlgorithmException {
-		String salt = HashingUtil.makeNewSalt();
-		String digest = HashingUtil.hashing(dto.getEmail(), salt);
+	public String getDigestByEmail(String email) throws ResourceNotFoundException {
+		boolean isExists = accountRepository.existsByEmail(email);
+		HashEntity entity = null;
+		
+		if(isExists) {
+			entity = hashRepository.findByEmail(email).orElseThrow(ResourceNotFoundException::new);
+		} else {
+			throw new ResourceNotFoundException();
+		}
+		
+		return entity.getDigest();
+	}
+	
+	public AccountDto save(AccountSignDto dto) {
+		String digest = passwdEncoder.encode(dto.getPasswd());
 		
 		HashEntity entity = new HashEntity();
 		entity.setEmail(dto.getEmail());
-		entity.setSalt(salt);
 		entity.setDigest(digest);
 		
 		entity = hashRepository.save(entity);
-		
 		AccountDto accountDto = modelMapper.map(entity, AccountDto.class);
 		
 		return accountDto; 

@@ -3,26 +3,40 @@ window.onload = function() {
 	let isValidPw = false;
 	let isSamePw = false;
 	
-	$('#signup-form').submit(function(e) {
+	$('#signup-form').submit(function() {
+		let email = $('#input-email').val();
+		let passwd = $('#input-passwd').val();
+		let passwdrp = $('#input-passwd-repeat').val();
+		
 		if(!isValidEmail) {
 			alert('이메일을 확인해주세요');
-			e.preventDefault();
-			return;
+			return false;
 		}
 		
 		if(!isValidPw) {
 			alert('비밀번호 형식을 확인해주세요');
-			e.preventDefault();
-			return;
+			return false;
 		}
 		
 		if(!isSamePw) {
 			alert('비밀번호 확인이 다릅니다');
-			e.preventDefault();
-			return;
+			return false;
 		}
 		
+		$.post("/bogeum/api/account", {
+			email : email,
+			passwd : passwd,
+		})
 		
+		.done(function(data) {
+			console.log(data);
+		})
+		
+		.fail(function() {
+			
+		});
+		
+		return false;
 	});
 	
 	$('#input-email').on('blur', function() {

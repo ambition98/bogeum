@@ -40,6 +40,6 @@ public class BogeumEntity implements Serializable {
 	
 	/* ---- 연관 관계 --- */
 	@ManyToOne
-	@JoinColumn(name = "account_no")
+	@JoinColumn(name = "accountNo")
 	private AccountEntity account;
 }

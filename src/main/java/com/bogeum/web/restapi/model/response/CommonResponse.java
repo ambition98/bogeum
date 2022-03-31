@@ -1,15 +1,15 @@
 package com.bogeum.web.restapi.model.response;
 
-import com.bogeum.web.restapi.model.ApiResponseCode;
+import com.bogeum.web.restapi.model.ApiStatus;
 
 import lombok.Getter;
 
 @Getter
 public class CommonResponse {
 	
-	private ApiResponseCode apiResponseCode;
+	private ApiStatus apiResponseCode;
 	
-	public CommonResponse(ApiResponseCode apiResponseCode) {
+	public CommonResponse(ApiStatus apiResponseCode) {
 		this.apiResponseCode = apiResponseCode;
 	}
 }

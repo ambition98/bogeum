@@ -8,6 +8,7 @@
 </head>
 <body>
 test
+<%= JspFactory.getDefaultFactory().getEngineInfo().getSpecificationVersion() %>
 </body>
 </html>
 <%-- <%@ include file="include/footer.jsp" %> --%>

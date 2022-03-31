@@ -12,7 +12,8 @@ import lombok.ToString;
 public class AccountDto {
 	private int no;
 	private String email;
-	private String imagePath;
 	private boolean isVerified;
+	private String platformName;
+	private String imagePath;
 	private Timestamp regdate;
 }
