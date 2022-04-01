@@ -1,4 +1,4 @@
-package com.bogeum.web.restapi;
+package com.bogeum.web.controller.api;
 
 import java.util.List;
 
@@ -17,11 +17,10 @@ import com.bogeum.exception.ResourceNotFoundException;
 import com.bogeum.util.CheckStringValidation;
 import com.bogeum.web.dto.account.AccountDto;
 import com.bogeum.web.dto.account.AccountSignDto;
-import com.bogeum.web.entity.AccountEntity;
-import com.bogeum.web.restapi.model.ApiStatus;
-import com.bogeum.web.restapi.model.response.CommonResponse;
-import com.bogeum.web.restapi.model.response.ListDtoResponse;
-import com.bogeum.web.restapi.model.response.SingleDtoResponse;
+import com.bogeum.web.controller.api.model.ApiStatus;
+import com.bogeum.web.controller.api.model.response.CommonResponse;
+import com.bogeum.web.controller.api.model.response.ListDtoResponse;
+import com.bogeum.web.controller.api.model.response.SingleDtoResponse;
 import com.bogeum.web.service.AccountService;
 import com.bogeum.web.service.HashService;
 
@@ -57,8 +56,8 @@ public class AccountApi {
 	@GetMapping("/{no}")
 	public ResponseEntity<CommonResponse> getAccount(@PathVariable String no) {
 		long requestId = Thread.currentThread().getId();
-		Long longNo;
-		AccountDto dto = null;
+		long longNo;
+		AccountDto dto;
 		log.info("[{}] Request, GET account/api/{}", requestId, no);
 		try {
 			longNo = Long.parseLong(no);
@@ -99,7 +98,7 @@ public class AccountApi {
 		
 		log.info("[{}] Success, POST /api/account", requestId);
 		log.info("[{}] responseDto: {}", requestId, dto.toString());
-		SingleDtoResponse<AccountDto> response = new SingleDtoResponse<AccountDto>(ApiStatus.SUCCESS, dto);
+		SingleDtoResponse<AccountDto> response = new SingleDtoResponse<>(ApiStatus.SUCCESS, dto);
 		
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}

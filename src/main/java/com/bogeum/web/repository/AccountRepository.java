@@ -14,9 +14,9 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
 	
 	List<AccountEntity> findAll();
 	
-	@Query(value = "select case when (count(*) > 0) then true else false end"
+	@Query(value = "select case when count(*) > 0 then true else false end"
 				+ " from AccountEntity an"
-				+ " where platformName is null and an.email = ?1")
+				+ " where an.platformName is null and an.email = ?1")
 	boolean existsByEmail(String email);
 	
 }

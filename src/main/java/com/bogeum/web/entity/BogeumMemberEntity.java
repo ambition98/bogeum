@@ -16,7 +16,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Getter
-@ToString(exclude = {"account", "bogeum"})
+@ToString
 @Entity
 @Table(name = "BOGEUM_MEMBER")
 public class BogeumMemberEntity implements Serializable {
@@ -27,7 +27,7 @@ public class BogeumMemberEntity implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long no;
+	private long no;
 	
 //	@Column(nullable = false)
 //	private int bogeum_no;
@@ -43,10 +43,12 @@ public class BogeumMemberEntity implements Serializable {
 	
 	/* ---- 연관 관계 --- */
 	@ManyToOne
+	@ToString.Exclude
 	@JoinColumn(name = "account_no")
 	private AccountEntity account;
 	
 	@ManyToOne
+	@ToString.Exclude
 	@JoinColumn(name = "bougem_no")
 	private BogeumEntity bogeum;
 }

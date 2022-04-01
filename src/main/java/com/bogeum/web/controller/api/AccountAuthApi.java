@@ -1,4 +1,4 @@
-package com.bogeum.web.restapi;
+package com.bogeum.web.controller.api;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bogeum.exception.ResourceNotFoundException;
 import com.bogeum.web.dto.account.AccountSignDto;
-import com.bogeum.web.restapi.model.ApiStatus;
-import com.bogeum.web.restapi.model.response.CommonResponse;
+import com.bogeum.web.controller.api.model.ApiStatus;
+import com.bogeum.web.controller.api.model.response.CommonResponse;
 import com.bogeum.web.service.HashService;
 
 import lombok.RequiredArgsConstructor;

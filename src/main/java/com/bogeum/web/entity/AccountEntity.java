@@ -24,10 +24,10 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString(exclude = {"bogeum", "bogeumMember"})
+@ToString
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "DTYPE")
+@DiscriminatorColumn()
 @Table(name = "ACCOUNT")
 @DynamicInsert
 public class AccountEntity implements Serializable {
@@ -35,7 +35,7 @@ public class AccountEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long no;
+	private long no;
 	
 	@Column(length = 50, nullable = false)
 	private String email;
@@ -67,8 +67,10 @@ public class AccountEntity implements Serializable {
 	
 	/* ---- 연관 관계 --- */
 	@OneToMany(mappedBy = "account")
+	@ToString.Exclude
 	private List<BogeumEntity> bogeum;
 	
 	@OneToMany(mappedBy = "account")
+	@ToString.Exclude
 	private List<BogeumMemberEntity> bogeumMember;
 }

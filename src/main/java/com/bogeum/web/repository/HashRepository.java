@@ -11,6 +11,6 @@ public interface HashRepository extends JpaRepository<HashEntity, Long> {
 	
 	@Query(value = "select he"
 				+ " from HashEntity he"
-				+ " where platFormName is null and he.email = ?1")
+				+ " where he.platformName is null and he.email = ?1")
 	Optional<HashEntity> findByEmail(String email);
 }

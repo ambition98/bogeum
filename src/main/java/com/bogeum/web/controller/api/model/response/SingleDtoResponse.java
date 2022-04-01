@@ -1,13 +1,13 @@
-package com.bogeum.web.restapi.model.response;
+package com.bogeum.web.controller.api.model.response;
 
-import com.bogeum.web.restapi.model.ApiStatus;
+import com.bogeum.web.controller.api.model.ApiStatus;
 
 import lombok.Getter;
 
 @Getter
 public class SingleDtoResponse<T> extends CommonResponse {
 	
-	private T dto;
+	private final T dto;
 	
 	public SingleDtoResponse(ApiStatus apiResponseCode, T dto) {
 		super(apiResponseCode);

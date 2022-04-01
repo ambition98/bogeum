@@ -1,4 +1,4 @@
-package com.bogeum.web.restapi.model;
+package com.bogeum.web.controller.api.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
@@ -28,6 +28,6 @@ public enum ApiStatus {
 	INVALID_EMAIL_PATTERN(-101, "Invalid email pattern"),
 	INVALID_EMAIL_OR_PASSWORD(-102, "Invalid email or password");
 	
-	private int code;
-	private String msg;
+	private final int code;
+	private final String msg;
 }
