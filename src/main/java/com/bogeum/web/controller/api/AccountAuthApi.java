@@ -1,20 +1,18 @@
 package com.bogeum.web.controller.api;
 
+import com.bogeum.exception.ResourceNotFoundException;
+import com.bogeum.web.controller.api.model.ApiStatus;
+import com.bogeum.web.controller.api.model.response.CommonResponse;
+import com.bogeum.web.dto.account.AccountSignDto;
+import com.bogeum.web.service.HashService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.bogeum.exception.ResourceNotFoundException;
-import com.bogeum.web.dto.account.AccountSignDto;
-import com.bogeum.web.controller.api.model.ApiStatus;
-import com.bogeum.web.controller.api.model.response.CommonResponse;
-import com.bogeum.web.service.HashService;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
@@ -30,8 +28,7 @@ public class AccountAuthApi {
 		long requestId = Thread.currentThread().getId();
 		String digest;
 		log.debug("[{}] Requested, /api/account/auth, email: '{}'", requestId, dto.getEmail());
-		
-		
+
 		try {
 			digest = hashService.getDigestByEmail(dto.getEmail());
 		} catch (ResourceNotFoundException e) { //일치하는 이메일을 찾을 수 없음

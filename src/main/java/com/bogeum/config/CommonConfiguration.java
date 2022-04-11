@@ -12,6 +12,8 @@ public class CommonConfiguration {
 	public ModelMapper modelMapper() {
 		ModelMapper modelmapper = new ModelMapper();
 		modelmapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+//		modelmapper.getConfiguration().setFieldMatchingEnabled(true);
+//		modelmapper.getConfiguration().setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE);
 		
 		return modelmapper;
 	}

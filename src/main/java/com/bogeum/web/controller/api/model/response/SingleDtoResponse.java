@@ -1,7 +1,6 @@
 package com.bogeum.web.controller.api.model.response;
 
 import com.bogeum.web.controller.api.model.ApiStatus;
-
 import lombok.Getter;
 
 @Getter

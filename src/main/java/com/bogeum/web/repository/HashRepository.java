@@ -1,11 +1,10 @@
 package com.bogeum.web.repository;
 
-import java.util.Optional;
-
+import com.bogeum.web.entity.HashEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.bogeum.web.entity.HashEntity;
+import java.util.Optional;
 
 public interface HashRepository extends JpaRepository<HashEntity, Long> {
 	

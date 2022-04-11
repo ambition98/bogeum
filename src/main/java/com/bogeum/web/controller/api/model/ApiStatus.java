@@ -2,7 +2,6 @@ package com.bogeum.web.controller.api.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

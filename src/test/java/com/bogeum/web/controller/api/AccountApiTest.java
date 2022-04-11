@@ -10,16 +10,16 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.assertj.core.api.Assertions.*;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.BDDMockito.given;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AccountApi.class)
 @AutoConfigureMockMvc
@@ -36,7 +36,28 @@ class AccountApiTest {
 
     @Test
     @DisplayName("모든 계정 정보 가져오기")
-    void getAllAccounts() {
+    void getAllAccounts() throws Exception {
+        AccountDto dto1 = AccountDto.builder()
+                .no(1)
+                .email("test1@test.com")
+                .build();
+        AccountDto dto2 = AccountDto.builder()
+                .no(2)
+                .email("test2@test.com")
+                .build();
+
+        List<AccountDto> dtoList = new ArrayList<>();
+        dtoList.add(dto1);
+        dtoList.add(dto2);
+
+        given(accountService.findAll()).willReturn(dtoList);
+
+        mockMvc.perform(get("/api/account"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size").value(2))
+                .andExpect(jsonPath("$.dtoList[0].no").value(1))
+                .andExpect(jsonPath("$.dtoList[1].no").value(2))
+                .andDo(print());
     }
 
     @Test
@@ -91,6 +112,20 @@ class AccountApiTest {
 
     @Test
     @DisplayName("이메일 중복 체크")
-    void isValidEmail() {
+    void isValidEmail() throws Exception {
+        String email = "test@test.com";
+        given(accountService.isExistedEmail(email)).willReturn(true);
+
+        mockMvc.perform(get("/api/account/exists?email=new-mail@test.com"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.apiStatus.code").value(1))
+                .andExpect(jsonPath("$.apiStatus.msg").value("Success"))
+                .andDo(print());
+
+        mockMvc.perform(get("/api/account/exists?email=" + email))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.apiStatus.code").value(-100))
+                .andExpect(jsonPath("$.apiStatus.msg").value("Email is already used"))
+                .andDo(print());
     }
 }

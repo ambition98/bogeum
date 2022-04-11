@@ -1,30 +1,21 @@
 package com.bogeum.web.controller.api;
 
-import java.util.List;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.bogeum.exception.ResourceNotFoundException;
 import com.bogeum.util.CheckStringValidation;
-import com.bogeum.web.dto.account.AccountDto;
-import com.bogeum.web.dto.account.AccountSignDto;
 import com.bogeum.web.controller.api.model.ApiStatus;
 import com.bogeum.web.controller.api.model.response.CommonResponse;
 import com.bogeum.web.controller.api.model.response.ListDtoResponse;
 import com.bogeum.web.controller.api.model.response.SingleDtoResponse;
+import com.bogeum.web.dto.account.AccountDto;
+import com.bogeum.web.dto.account.AccountSignDto;
 import com.bogeum.web.service.AccountService;
 import com.bogeum.web.service.HashService;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -73,7 +64,7 @@ public class AccountApi {
 		}
 		
 		log.info("[{}] Success, GET account/api/{}", requestId, longNo);
-		log.info("[{}] responseDto: {}", requestId,dto.toString());
+		log.info("[{}] responseDto: {}", requestId, dto.toString());
 		SingleDtoResponse<AccountDto> response = new SingleDtoResponse<>(ApiStatus.SUCCESS, dto);
 		
 		return new ResponseEntity<>(response, HttpStatus.OK);
@@ -83,11 +74,13 @@ public class AccountApi {
 	public ResponseEntity<CommonResponse> postAccount(AccountSignDto signupDto) {
 		long requestId = Thread.currentThread().getId();
 		log.info("[{}] Request, POST /api/account ,email: '{}'" , requestId, signupDto.getEmail());
+
 		// 이메일 정규식 확인
 		if(!CheckStringValidation.checkEmail(signupDto.getEmail())) {
 			log.info("[{}] Error, '{}' is invalid email pattern", requestId, signupDto.getEmail());
 			return new ResponseEntity<>(new CommonResponse(ApiStatus.INVALID_EMAIL_PATTERN), HttpStatus.BAD_REQUEST);
 		}
+
 		// 이메일 중복 확인 (서버단에서 한번 더)
 		if(accountService.isExistedEmail(signupDto.getEmail())) {
 			log.info("[{}] Error, Email '{}' is already exist", requestId, signupDto.getEmail());

@@ -29,11 +29,11 @@ window.onload = function() {
 		})
 		
 		.done(function(data) {
-			console.log(data);
+			console.log(data.responseJSON);
 		})
 		
-		.fail(function() {
-			
+		.fail(function(data) {
+			console.log(data.responseJSON);
 		});
 		
 		return false;
@@ -50,13 +50,15 @@ window.onload = function() {
 			isValidEmail = true;
 			
 			$.get("/bogeum/api/account/exists", {"email": email})
-				.done(function() {
+				.done(function(data) {
 					//200 OK
+					console.log(data.responseJSON);
 					changeToValidState(input, msg2);
 				})
 				
-				.fail(function() {
+				.fail(function(data) {
 					//409 Conflict
+					console.log(data.responseJSON);
 					changeToInvalidState(input, msg2);
 				});
 			

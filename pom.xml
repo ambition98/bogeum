@@ -10,7 +10,7 @@
 	<groupId>com</groupId>
 	<artifactId>bogeum</artifactId>
 	<version>0.0.1</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>bogeum</name>
 	<description>Project bogeum</description>
 	<properties>
@@ -93,6 +93,7 @@
 			<version>2.1.12</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
 		<dependency>
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>

@@ -16,8 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.BDDMockito.given;
-import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 class AccountServiceTest {

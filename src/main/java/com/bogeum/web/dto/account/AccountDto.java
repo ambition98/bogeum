@@ -1,16 +1,17 @@
 package com.bogeum.web.dto.account;
 
-import java.sql.Timestamp;
+import lombok.*;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import java.sql.Timestamp;
 
 @Getter
 @Setter
 @ToString
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class AccountDto {
-	private int no;
+	private long no;
 	private String email;
 	private boolean isVerified;
 	private String platformName;
